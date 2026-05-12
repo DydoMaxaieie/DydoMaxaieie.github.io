@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dário Maxaieie | Data Scientist & AI Researcher</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a0f1e;
+      --navy-mid: #111827;
+      --navy-light: #1e293b;
+      --accent: #2563eb;
+      --accent-glow: #3b82f6;
+      --gold: #f59e0b;
+      --white: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(148,163,184,0.12);
+      --card-bg: rgba(30,41,59,0.6);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy); color: var(--white);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300; line-height: 1.7; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+      background-size: 48px 48px; pointer-events: none; z-index: 0;
+    }
+    section, nav, footer, .stats-bar { position: relative; z-index: 1; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.25rem 4rem;
+      background: rgba(10,15,30,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); z-index: 100;
+    }
+    .nav-logo { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.95rem; color: var(--accent-glow); letter-spacing: 0.05em; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 4rem; padding-top: 80px; }
+    .hero-location { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.12em; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+    .hero-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--accent-glow); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6.5vw, 5.5rem); font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.45s forwards; }
+    .hero-title .highlight { color: transparent; -webkit-text-stroke: 1.5px var(--accent-glow); }
+    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 580px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; line-height: 1.75; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.8rem; background: var(--accent); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+    .btn-primary:hover { background: var(--accent-glow); transform: translateY(-2px); }
+    .btn-outline { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.8rem; background: transparent; color: var(--white); font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+    .btn-outline:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 4rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem; opacity: 0; animation: fadeIn 1s 1.2s forwards; }
+    .hero-scroll::before { content: ''; width: 40px; height: 1px; background: var(--muted); }
+
+    /* STATS */
+    .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 0 4rem; }
+    .stat-item { padding: 2rem 0; text-align: center; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.3rem; font-weight: 700; color: var(--white); display: block; }
+    .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.25rem; }
+
+    /* SECTIONS */
+    .section { padding: 7rem 4rem; }
+    .section-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 3.5rem; }
+    .section-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent-glow); letter-spacing: 0.1em; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* ABOUT */
+    #about .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .about-text p { color: var(--muted); font-size: 1rem; margin-bottom: 1.25rem; }
+    .about-text p strong { color: var(--white); font-weight: 500; }
+    .about-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.25); padding: 0.4rem 0.9rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent-glow); letter-spacing: 0.08em; margin-bottom: 1.25rem; }
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .skill-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.25rem; backdrop-filter: blur(8px); transition: border-color 0.2s, transform 0.2s; }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .skill-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .skill-name { font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; font-weight: 600; color: var(--white); letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .skill-desc { font-size: 0.78rem; color: var(--muted); }
+
+    /* PROJECTS */
+    #projects .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .project-card { background: var(--card-bg); border: 1px solid var(--border); padding: 2rem; backdrop-filter: blur(8px); position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s; display: flex; flex-direction: column; }
+    .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+    .project-card:hover { border-color: rgba(37,99,235,0.4); transform: translateY(-4px); }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--accent-glow); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .project-badge { display: inline-block; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: var(--gold); font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; padding: 0.2rem 0.6rem; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+    .project-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .project-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.65; flex: 1; margin-bottom: 1.5rem; }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.5rem; }
+    .tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; padding: 0.28rem 0.65rem; background: rgba(37,99,235,0.1); color: var(--accent-glow); border: 1px solid rgba(37,99,235,0.22); letter-spacing: 0.04em; }
+    .project-link { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+    .project-link:hover { color: var(--accent-glow); }
+
+    /* TIMELINE */
+    #experience .timeline { position: relative; padding-left: 2.5rem; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--border); }
+    .timeline-item { position: relative; padding-bottom: 3rem; }
+    .timeline-item::before { content: ''; position: absolute; left: -2.5rem; top: 0.4rem; width: 8px; height: 8px; background: var(--accent); border: 2px solid var(--navy); border-radius: 50%; transform: translateX(-3.5px); }
+    .timeline-period { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent-glow); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+    .timeline-role { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .timeline-company { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.75rem; }
+    .timeline-desc { font-size: 0.87rem; color: var(--muted); max-width: 640px; line-height: 1.7; }
+
+    /* ACHIEVEMENTS */
+    #achievements .ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .ach-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.75rem; backdrop-filter: blur(8px); transition: border-color 0.2s, transform 0.2s; display: flex; gap: 1.25rem; align-items: flex-start; }
+    .ach-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .ach-icon { font-size: 2rem; flex-shrink: 0; }
+    .ach-year { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 0.4rem; }
+    .ach-title { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.92rem; font-weight: 500; color: var(--white); margin-bottom: 0.3rem; }
+    .ach-desc { font-size: 0.8rem; color: var(--muted); }
+
+    /* CONTACT */
+    #contact { border-top: 1px solid var(--border); }
+    .contact-inner { max-width: 640px; }
+    .contact-inner p { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.83rem; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--card-bg); transition: border-color 0.2s, color 0.2s, transform 0.2s; }
+    .contact-link:hover { border-color: var(--accent); color: var(--white); transform: translateX(4px); }
+    .contact-link-icon { font-size: 1.1rem; }
+
+    /* FOOTER */
+    footer { padding: 2rem 4rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      nav { padding: 1.25rem 2rem; }
+      #hero, .section, footer { padding-left: 2rem; padding-right: 2rem; }
+      .stats-bar { margin: 0 2rem; grid-template-columns: 1fr 1fr; }
+      #about .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      #projects .projects-grid { grid-template-columns: 1fr 1fr; }
+      #achievements .ach-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      #projects .projects-grid { grid-template-columns: 1fr; }
+      .hero-scroll { display: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">// dário.maxaieie</div>
+    <ul class="nav-links">
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#projects">Projectos</a></li>
+      <li><a href="#experience">Experiência</a></li>
+      <li><a href="#achievements">Conquistas</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <p class="hero-location">📍 Maputo, Moçambique</p>
+    <p class="hero-tag">Data Scientist · Computer Vision · Mathematical Modeler</p>
+    <h1 class="hero-title">Dário<br /><span class="highlight">Maxaieie</span></h1>
+    <p class="hero-sub">
+      Matemático e MSc em Biomatemática pela Universidade Eduardo Mondlane.
+      Especialista em Machine Learning, Deep Learning e Computer Vision —
+      aplicando IA para resolver desafios científicos e sociais em África.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">Ver Projectos →</a>
+      <a href="https://github.com/DydoMaxaieie" target="_blank" class="btn-outline">GitHub ↗</a>
+    </div>
+    <div class="hero-scroll">Scroll para explorar</div>
+  </section>
+
+  <div class="stats-bar reveal">
+    <div class="stat-item">
+      <span class="stat-num">Top 2%</span>
+      <span class="stat-label">Kaggle Titanic</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">10+</span>
+      <span class="stat-label">Anos de Ensino</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">85%</span>
+      <span class="stat-label">Score Graduação</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">3+</span>
+      <span class="stat-label">Competições Zindi/Kaggle</span>
+    </div>
+  </div>
+
+  <section id="about" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Sobre Mim</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <div class="about-badge">🎓 MSc Biomatemática · Eduardo Mondlane University</div>
+        <p>Sou <strong>Dário Maxaieie</strong>, matemático e investigador moçambicano apaixonado por Inteligência Artificial e Ciência de Dados. Formei-me como <strong>melhor aluno da turma</strong> em Matemática e actualmente curso mestrado em Matemática Aplicada com foco em Biologia Matemática e modelação de epidemias.</p>
+        <p>Combino uma sólida base matemática — Álgebra Linear Avançada, Equações Diferenciais Parciais, Processos Estocásticos, Controlo Óptimo — com experiência prática em <strong>Computer Vision, Machine Learning e Deep Learning</strong> através de projectos competitivos internacionais.</p>
+        <p>Acredito que a IA tem o poder de transformar África. Trabalho em projectos de <strong>detecção de anomalias em culturas, classificação de imagens de satélite (CubeSat)</strong> e modelação matemática de doenças epidémicas.</p>
+      </div>
+      <div class="skills-grid reveal">
+        <div class="skill-card">
+          <div class="skill-icon">🧠</div>
+          <div class="skill-name">Deep Learning</div>
+          <div class="skill-desc">PyTorch, TensorFlow, CNNs, YOLOv5, Faster R-CNN</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🛰️</div>
+          <div class="skill-name">Computer Vision</div>
+          <div class="skill-desc">OpenCV, GDAL, imagens multiespectrais, CubeSat</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🐍</div>
+          <div class="skill-name">Python & R</div>
+          <div class="skill-desc">Pandas, NumPy, Scikit-learn, Matplotlib, SPSS, Matlab</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🗄️</div>
+          <div class="skill-name">Dados & BD</div>
+          <div class="skill-desc">SQL, MongoDB, APIs, ETL pipelines</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">📐</div>
+          <div class="skill-name">Matemática</div>
+          <div class="skill-desc">Álgebra, EDP, Sistemas Dinâmicos, Controlo Óptimo</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">💻</div>
+          <div class="skill-name">HPC & DevOps</div>
+          <div class="skill-desc">Linux, Bash, Shell Scripting, Git, LaTeX, Overleaf</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section" style="background: rgba(17,24,39,0.5);">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Projectos em Destaque</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-tag">Computer Vision · Zindi Africa</div>
+        <div class="project-badge">🏆 Competição Internacional</div>
+        <div class="project-title">Detecção de Anomalias em Raízes de Culturas</div>
+        <div class="project-desc">Classificação de imagens para identificar anomalias em raízes de culturas agrícolas com CNNs. Projecto para apoiar segurança alimentar em África.</div>
+        <div class="project-stack">
+          <span class="tag">PyTorch</span><span class="tag">CNN</span><span class="tag">OpenCV</span><span class="tag">Scikit-learn</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-tag">Satellite Imagery · Zindi Africa</div>
+        <div class="project-badge">🏆 Competição Internacional</div>
+        <div class="project-title">Estimativa de Volume de Mandioca</div>
+        <div class="project-desc">Modelo de regressão para previsão de produção de mandioca a partir de imagens de satélite, com análise de índices de vegetação multiespectrais via GDAL.</div>
+        <div class="project-stack">
+          <span class="tag">GDAL</span><span class="tag">NumPy</span><span class="tag">PyTorch</span><span class="tag">Pandas</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-tag">Remote Sensing · DARA 2025</div>
+        <div class="project-badge">🛰️ CubeSat</div>
+        <div class="project-title">Classificação de Imagens CubeSat</div>
+        <div class="project-desc">Classificação de uso e cobertura do solo a partir de imagens multiespectrais de CubeSat, com transfer learning e data augmentation para dados limitados.</div>
+        <div class="project-stack">
+          <span class="tag">TensorFlow</span><span class="tag">Transfer Learning</span><span class="tag">GDAL</span><span class="tag">OpenCV</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-tag">Object Detection</div>
+        <div class="project-title">Pipeline de Detecção com YOLOv5</div>
+        <div class="project-desc">Pipeline de detecção de objectos em imagens agrícolas e ambientais com YOLOv5 e Faster R-CNN, com quantização do modelo para reduzir tempo de inferência GPU.</div>
+        <div class="project-stack">
+          <span class="tag">YOLOv5</span><span class="tag">Faster R-CNN</span><span class="tag">PyTorch</span><span class="tag">OpenCV</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-tag">Epidemiologia · Investigação UEM</div>
+        <div class="project-title">Modelação Matemática de Epidemias</div>
+        <div class="project-desc">Modelos SIR/SEIR com Controlo Óptimo para doenças infecciosas no âmbito do mestrado em Biomatemática — aplicados à saúde pública em Moçambique.</div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">Matlab</span><span class="tag">Controlo Óptimo</span><span class="tag">LaTeX</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-tag">Data Science · WorldQuant University</div>
+        <div class="project-title">Pipelines ETL & ML End-to-End</div>
+        <div class="project-desc">Applied Data Science Lab: acesso a dados via SQL, MongoDB e APIs, ETL pipelines, modelos supervisionados/não supervisionados e visualizações para stakeholders.</div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">MongoDB</span><span class="tag">Scikit-learn</span>
+        </div>
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="project-link">Ver no GitHub →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Experiência</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline reveal">
+
+      <div class="timeline-item">
+        <div class="timeline-period">Fev 2015 — Presente</div>
+        <div class="timeline-role">Docente Universitário</div>
+        <div class="timeline-company">Universidade Eduardo Mondlane · Maputo, Moçambique</div>
+        <div class="timeline-desc">Leccionação de Análise Matemática, Álgebra Linear e Equações Diferenciais a estudantes de graduação. Investigação em Biologia Matemática e modelação de doenças epidémicas com Controlo Óptimo.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-period">Mar 2019 — Presente</div>
+        <div class="timeline-role">Docente Universitário</div>
+        <div class="timeline-company">ISCIM — Instituto Superior de Comunicação e Imagem de Moçambique · Maputo</div>
+        <div class="timeline-desc">Ensino de disciplinas de Matemática a estudantes de graduação, produção de materiais pedagógicos e orientação académica.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-period">Nov 2023</div>
+        <div class="timeline-role">Applied Data Science Lab</div>
+        <div class="timeline-company">WorldQuant University · Remote</div>
+        <div class="timeline-desc">Programa intensivo: acesso a dados via SQL, NoSQL e APIs, criação de pipelines ETL, modelos de machine learning supervisionado e não supervisionado, e visualização para audiências não-técnicas.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-period">Out 2022</div>
+        <div class="timeline-role">Formação em High Performance Computing</div>
+        <div class="timeline-company">INAGE — Instituto Nacional de Governo Electrónico · Maputo</div>
+        <div class="timeline-desc">Aplicações de HPC, ecossistema MoRENet, previsão numérica do estado do mar (CROCO) e simulações de temperatura (WRF). Shell/Bash scripting e Python científico.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="achievements" class="section" style="background: rgba(17,24,39,0.5);">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Conquistas</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="ach-grid">
+
+      <div class="ach-card reveal">
+        <div class="ach-icon">🥇</div>
+        <div>
+          <div class="ach-year">2014</div>
+          <div class="ach-title">Melhor Aluno da Turma — Graduação em Matemática</div>
+          <div class="ach-desc">Score de 85% na UEM. Seleccionado como Assistente Universitário e orador em conferências científicas estudantis.</div>
+        </div>
+      </div>
+
+      <div class="ach-card reveal">
+        <div class="ach-icon">🏆</div>
+        <div>
+          <div class="ach-year">2023</div>
+          <div class="ach-title">Top 2% Mundial · Titanic ML (Kaggle)</div>
+          <div class="ach-desc">255º lugar entre 16.246 participantes — top 2% global na competição de Machine Learning mais icónica do Kaggle.</div>
+        </div>
+      </div>
+
+      <div class="ach-card reveal">
+        <div class="ach-icon">🚗</div>
+        <div>
+          <div class="ach-year">2023</div>
+          <div class="ach-title">2º/9 · Maputo Mobility Predictions Hackathon (Zindi)</div>
+          <div class="ach-desc">2º lugar no hackathon de previsão de mobilidade urbana em Maputo powered by Yango — competição Zindi Africa.</div>
+        </div>
+      </div>
+
+      <div class="ach-card reveal">
+        <div class="ach-icon">🛰️</div>
+        <div>
+          <div class="ach-year">2025</div>
+          <div class="ach-title">DARA CubeSat Image Classification Challenge</div>
+          <div class="ach-desc">Classificação de uso e cobertura do solo com imagens multiespectrais de CubeSat em competição internacional de Remote Sensing.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Contacto</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-inner reveal">
+      <p>Aberto a colaborações em projectos de IA, oportunidades de investigação e competições de Data Science. Fale comigo:</p>
+      <div class="contact-links">
+        <a href="https://github.com/DydoMaxaieie" target="_blank" class="contact-link">
+          <span class="contact-link-icon">🐙</span>github.com/DydoMaxaieie
+        </a>
+        <a href="https://linkedin.com/in/dário-maxaieie" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>linkedin.com/in/dário-maxaieie
+        </a>
+        <a href="mailto:dariommaxaieie@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>dariommaxaieie@gmail.com
+        </a>
+        <a href="tel:+258879361995" class="contact-link">
+          <span class="contact-link-icon">📞</span>+258 879 361 995
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Dário Maxaieie · Maputo, Moçambique</p>
+    <p>Data Scientist · Mathematical Modeler · AI Researcher</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
